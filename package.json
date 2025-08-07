@@ -1,0 +1,21 @@
+{
+	"name": "@heyo.so/js",
+	"version": "1.0.2",
+	"description": "",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "tsup",
+		"release": "npm run build && npm version patch && npm publish --access public"
+	},
+	"scope": "",
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"type": "commonjs",
+	"devDependencies": {
+		"tsup": "^8.5.0",
+		"typescript": "^5.9.2"
+	}
+}
