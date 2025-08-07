@@ -55,10 +55,10 @@ HEYO.identify({
 
 ## Configuration (`HeyoConfig`)
 
-| Option    | Type       | Default                        | Description                                              |
-| --------- | ---------- | ------------------------------ | -------------------------------------------------------- |
-| projectId | `string?`  | –                              | Your HEYO project ID. Required for localhost development |
-| hidden    | `boolean?` | `false`                        | Start with the widget fully hidden                       |
+| Option    | Type       | Default | Description                                              |
+| --------- | ---------- | ------- | -------------------------------------------------------- |
+| projectId | `string?`  | –       | Your HEYO project ID. Required for localhost development |
+| hidden    | `boolean?` | `false` | Start with the widget fully hidden                       |
 
 Example:
 
@@ -141,19 +141,6 @@ export interface HeyoGlobal extends HeyoAPI {
 	init(opts?: HeyoConfig): Promise<HeyoAPI>;
 }
 ```
-
----
-
-## Contributing
-
-1. `git clone` this repo & `cd` into it
-2. `npm i`
-3. `npm run build` to generate `dist/`
-4. Link locally with `npm link` then `npm link @heyo.so/js` in a test project
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
----
 
 ## License
 
