@@ -15,7 +15,11 @@
 	"license": "MIT",
 	"type": "commonjs",
 	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^8.39.1",
+		"eslint": "^9.33.0",
+		"prettier": "^3.6.2",
 		"tsup": "^8.5.0",
-		"typescript": "^5.9.2"
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.1"
 	}
 }
