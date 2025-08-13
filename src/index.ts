@@ -33,6 +33,8 @@ function injectScript(src: string): Promise<HeyoAPI> {
  * @returns The HEYO API.
  */
 export async function loadHeyo(opts: HeyoConfig = {}): Promise<HeyoAPI> {
+	if (typeof window === "undefined") return Promise.resolve({} as HeyoAPI); // SSR Guard
+
 	if (window.HEYO?.ready) return window.HEYO;
 	if (loaderPromise) return loaderPromise;
 
@@ -66,6 +68,8 @@ export const HEYO: HeyoGlobal = new Proxy({} as HeyoGlobal, {
 	get(_t, prop: PropertyKey) {
 		// Return the init shortcut directly so users can call HEYO.init()
 		if (prop === "init") return init;
+
+		if (typeof window === "undefined") return () => {}; // SSR Guard
 
 		// All other property accesses are treated as async calls to the real API
 		return (...args: any[]) => {
