@@ -12,7 +12,10 @@ function injectScript(src: string): Promise<HeyoAPI> {
 		const script = document.createElement("script");
 		script.async = true;
 		script.src = src;
-		script.onerror = () => reject(new Error("Failed to load HEYO script"));
+		script.onerror = (ev) => {
+			console.error(ev);
+			reject(new Error(`Failed to load HEYO script: ${ev.toString()}`));
+		};
 		script.onload = () => {
 			if (window.HEYO) resolve(window.HEYO);
 			else reject(new Error("HEYO did not attach to window"));
@@ -35,7 +38,8 @@ export async function loadHeyo(opts: HeyoConfig = {}): Promise<HeyoAPI> {
 
 	const isLocalhost = window.location.hostname === "localhost";
 
-	if (isLocalhost) console.log(`💬 [HEYO DEV] Loading HEYO script with options:`, opts);
+	if (isLocalhost)
+		console.log(`💬 [HEYO DEV] Loading HEYO script with options:`, opts);
 
 	const url = new URL(opts.scriptSrc ?? "https://heyo.so/embed/script");
 	if (opts.projectId) url.searchParams.set("projectId", opts.projectId);
