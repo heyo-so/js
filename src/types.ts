@@ -31,6 +31,15 @@ export type HeyoAPI = {
 	 */
 	close(): void;
 	/**
+	 * Toggle the HEYO widget open/closed.
+	 */
+	toggle(): void;
+	/**
+	 * Check if the HEYO widget is currently open.
+	 * @returns true if the widget is open, false otherwise
+	 */
+	isOpen(): boolean;
+	/**
 	 * Identify the user using an email or your internal user ID. Can also pass a name to show in the dashboard.
 	 *
 	 * `meta.userId` -> Your internal user ID.

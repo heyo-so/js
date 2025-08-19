@@ -111,6 +111,19 @@ export const HEYO: HeyoGlobal = new Proxy({} as HeyoGlobal, {
             return !!(window.HEYO && typeof window.HEYO.identify === 'function');
         }
 
+        // For isOpen, we need to call it synchronously and return the result
+        // This is a special case since it returns a boolean value immediately
+        if (prop === 'isOpen') {
+            return () => {
+                // If window.HEYO exists and has isOpen, call it
+                if (window.HEYO && typeof window.HEYO.isOpen === 'function') {
+                    return window.HEYO.isOpen();
+                }
+                // Default to false if not ready
+                return false;
+            };
+        }
+
         // All other property accesses are treated as async calls to the real API
         return (...args: unknown[]) => {
             const methodName = String(prop);
