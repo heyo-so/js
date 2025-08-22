@@ -13,6 +13,25 @@ export type HeyoConfig = {
 	scriptSrc?: string;
 };
 
+export type HeyoWidgetSettings = {
+	/**
+	 * The color of the widget button/card. Accepts hex color values.
+	 */
+	widgetColor?: string;
+	/**
+	 * The style of the widget.
+	 */
+	widgetStyle?: 'bubble' | 'agent-card';
+	/**
+	 * The position of the widget on the screen.
+	 */
+	widgetPosition?: 'left' | 'right';
+	/**
+	 * The size of the widget.
+	 */
+	widgetSize?: 'small' | 'medium' | 'large';
+};
+
 export type HeyoAPI = {
 	/**
 	 * Show the HEYO widget.
@@ -49,6 +68,27 @@ export type HeyoAPI = {
 	 * `meta.name` -> The user's name.
 	 */
 	identify(meta: HeyoIdentifyMeta): void;
+	/**
+	 * Dynamically configure the widget appearance. 
+	 * This allows you to change the widget style, position, size, and color at runtime.
+	 * Useful for having different widget configurations on different pages.
+	 * 
+	 * @example
+	 * // Show as agent card on landing page
+	 * HEYO.configure({ 
+	 *   widgetStyle: 'agent-card', 
+	 *   widgetPosition: 'right',
+	 *   widgetSize: 'medium',
+	 *   widgetColor: '#10b981'
+	 * });
+	 * 
+	 * // Show as minimal bubble in dashboard
+	 * HEYO.configure({ 
+	 *   widgetStyle: 'bubble', 
+	 *   widgetSize: 'small' 
+	 * });
+	 */
+	configure(settings: HeyoWidgetSettings): void;
 	/**
 	 * Flag becomes true once the widget finished booting.
 	 */
