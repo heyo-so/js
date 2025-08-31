@@ -52,6 +52,7 @@ export async function loadHeyo(opts: HeyoConfig = {}): Promise<HeyoAPI> {
     const url = new URL(opts.scriptSrc ?? 'https://heyo.so/embed/script');
     if (opts.projectId) url.searchParams.set('projectId', opts.projectId);
     if (opts.hidden) url.searchParams.set('hidden', 'true');
+    if (opts.logs) url.searchParams.set('logs', opts.logs);
 
     loaderPromise = injectScript(url.toString());
     return loaderPromise;

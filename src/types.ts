@@ -11,7 +11,19 @@ export type HeyoConfig = {
 	 * Use a different URL to load the script, for dev purposes only.
 	 */
 	scriptSrc?: string;
+	/**
+	 * Control the verbosity of console logs output by the widget script.
+	 * - 'debug'   → detailed debug information
+	 * - 'minimal' → only essential information (default)
+	 * - 'none'    → suppress all logs
+	 */
+	logs?: HeyoLogLevel;
 };
+
+/**
+ * The verbosity level for console logs emitted by the widget script.
+ */
+export type HeyoLogLevel = 'debug' | 'minimal' | 'none';
 
 export type HeyoWidgetSettings = {
 	/**
