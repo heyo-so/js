@@ -125,6 +125,19 @@ export const HEYO: HeyoGlobal = new Proxy({} as HeyoGlobal, {
             };
         }
 
+        // For getAgentStatus, we need to call it synchronously and return the result
+        // This is a special case since it returns a status value immediately
+        if (prop === 'getAgentStatus') {
+            return () => {
+                // If window.HEYO exists and has getAgentStatus, call it
+                if (window.HEYO && typeof window.HEYO.getAgentStatus === 'function') {
+                    return window.HEYO.getAgentStatus();
+                }
+                // Default to 'offline' if not ready
+                return 'offline';
+            };
+        }
+
         // All other property accesses are treated as async calls to the real API
         return (...args: unknown[]) => {
             const methodName = String(prop);

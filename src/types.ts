@@ -44,6 +44,11 @@ export type HeyoWidgetSettings = {
 	widgetSize?: 'small' | 'medium' | 'large';
 };
 
+/**
+ * The possible agent status values.
+ */
+export type HeyoAgentStatus = 'online' | 'away' | 'offline';
+
 export type HeyoAPI = {
 	/**
 	 * Show the HEYO widget.
@@ -101,6 +106,33 @@ export type HeyoAPI = {
 	 * });
 	 */
 	configure(settings: HeyoWidgetSettings): void;
+	/**
+	 * Get the current agent status.
+	 * @returns 'online', 'away', or 'offline'
+	 * 
+	 * @example
+	 * const status = HEYO.getAgentStatus();
+	 * if (status === 'online') {
+	 *   showLiveChatButton();
+	 * } else {
+	 *   showContactForm();
+	 * }
+	 */
+	getAgentStatus(): HeyoAgentStatus;
+	/**
+	 * Register a callback to be notified when the agent status changes.
+	 * The callback is called immediately with the current status when registered.
+	 * Multiple callbacks can be registered and they will all be called on status changes.
+	 * 
+	 * @param callback - Function to call when status changes
+	 * 
+	 * @example
+	 * HEYO.onAgentStatusChange((status) => {
+	 *   console.log('Agent is now:', status);
+	 *   updateUIBasedOnStatus(status);
+	 * });
+	 */
+	onAgentStatusChange(callback: (status: HeyoAgentStatus) => void): void;
 	/**
 	 * Flag becomes true once the widget finished booting.
 	 */
