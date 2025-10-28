@@ -106,6 +106,11 @@ export const HEYO: HeyoGlobal = new Proxy({} as HeyoGlobal, {
 
         if (typeof window === 'undefined') return () => {}; // SSR Guard
 
+        // For the '_ready' flag, check directly on window.HEYO
+        if (prop === '_ready') {
+            return window.HEYO?._ready ?? false;
+        }
+
         // For the 'ready' property, check if window.HEYO exists with identify method
         // The identify method is only available when the widget is fully ready
         if (prop === 'ready') {
@@ -157,3 +162,5 @@ export const HEYO: HeyoGlobal = new Proxy({} as HeyoGlobal, {
         };
     },
 }) as HeyoGlobal;
+
+export default HEYO;

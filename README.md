@@ -55,10 +55,11 @@ HEYO.identify({
 
 ## Configuration (`HeyoConfig`)
 
-| Option    | Type       | Default | Description                                              |
-| --------- | ---------- | ------- | -------------------------------------------------------- |
-| projectId | `string?`  | –       | Your HEYO project ID. Required for localhost development |
-| hidden    | `boolean?` | `false` | Start with the widget fully hidden                       |
+| Option    | Type                             | Default     | Description                                              |
+| --------- | -------------------------------- | ----------- | -------------------------------------------------------- |
+| projectId | `string?`                        | –           | Your HEYO project ID. Required for localhost development |
+| hidden    | `boolean?`                       | `false`     | Start with the widget fully hidden                       |
+| logs      | `'debug' \| 'minimal' \| 'none'` | `'minimal'` | Control console log verbosity                            |
 
 Example:
 
@@ -66,6 +67,7 @@ Example:
 HEYO.init({
 	projectId: "abc123",
 	hidden: true,
+	logs: "debug",
 });
 ```
 
@@ -73,16 +75,75 @@ HEYO.init({
 
 ## API (`HeyoAPI`)
 
-| Method                            | Description                             |
-| --------------------------------- | --------------------------------------- |
-| `show()`                          | Reveal the floating button / agent card |
-| `hide()`                          | Completely hide the widget              |
-| `open()`                          | Open the chat panel                     |
-| `close()`                         | Close the chat panel                    |
-| `identify(meta)`                  | Pass user metadata (ID, email, name…)   |
-| `ready` <small>(property)</small> | `true` when the widget is fully loaded  |
+| Method                                    | Description                                                               |
+| ----------------------------------------- | ------------------------------------------------------------------------- |
+| `show(options?)`                          | Reveal the floating button / agent card. Use `{ force: true }` to override hideWhenOffline |
+| `hide()`                                  | Completely hide the widget                                                |
+| `open(options?)`                          | Open the chat panel. Use `{ force: true }` to override hideWhenOffline    |
+| `close()`                                 | Close the chat panel                                                      |
+| `toggle()`                                | Toggle the chat panel open/closed                                         |
+| `isOpen()`                                | Returns `true` if the chat panel is currently open                        |
+| `identify(meta)`                          | Pass user metadata (ID, email, name…)                                     |
+| `configure(settings)`                     | Dynamically change widget appearance (style, position, size, color)       |
+| `getAgentStatus()`                        | Returns current agent status: `'online'`, `'away'`, or `'offline'`        |
+| `onAgentStatusChange(callback)`           | Register a callback for when agent status changes                         |
+| `onReady(callback)`                       | Register a callback for when the widget is fully loaded and ready         |
+| `ready` <small>(property)</small>         | `true` when the widget is fully loaded                                    |
 
 All methods are **no-ops until the widget is ready**, but thanks to the internal queue you can call them at any time.
+
+### Examples
+
+#### Dynamic Configuration
+
+Change the widget appearance on different pages:
+
+```ts
+// Landing page - show agent card
+HEYO.configure({
+	widgetStyle: "agent-card",
+	widgetPosition: "right",
+	widgetSize: "medium",
+	widgetColor: "#10b981",
+});
+
+// Dashboard - show minimal bubble
+HEYO.configure({
+	widgetStyle: "bubble",
+	widgetSize: "small",
+	widgetColor: "#6366f1",
+});
+```
+
+#### Agent Status
+
+React to agent availability:
+
+```ts
+HEYO.onAgentStatusChange((status) => {
+	if (status === "online") {
+		console.log("Agents are online!");
+	} else if (status === "away") {
+		console.log("Agents are away");
+	} else {
+		console.log("All agents are offline");
+	}
+});
+
+// Or check status directly
+const status = HEYO.getAgentStatus();
+```
+
+#### Wait for Widget to be Ready
+
+Execute code when the widget is fully initialized:
+
+```ts
+HEYO.onReady(() => {
+	console.log("Widget is ready!");
+	HEYO.identify({ userId: "123", email: "user@example.com" });
+});
+```
 
 ---
 
@@ -128,17 +189,38 @@ In components you can now use `const { $heyo } = useNuxtApp()`.
 The SDK is written in TypeScript and ships its `.d.ts` files. Quick peek:
 
 ```ts
+export type HeyoAgentStatus = 'online' | 'away' | 'offline';
+
 export interface HeyoAPI {
-	show(): void;
+	show(options?: { force?: boolean }): void;
 	hide(): void;
-	open(): void;
+	open(options?: { force?: boolean }): void;
 	close(): void;
+	toggle(): void;
+	isOpen(): boolean;
 	identify(meta: HeyoIdentifyMeta): void;
+	configure(settings: HeyoWidgetSettings): void;
+	getAgentStatus(): HeyoAgentStatus;
+	onAgentStatusChange(callback: (status: HeyoAgentStatus) => void): void;
+	onReady(callback: () => void): void;
 	readonly ready: boolean;
 }
 
 export interface HeyoGlobal extends HeyoAPI {
 	init(opts?: HeyoConfig): Promise<HeyoAPI>;
+}
+
+export interface HeyoWidgetSettings {
+	widgetColor?: string;
+	widgetStyle?: 'bubble' | 'agent-card';
+	widgetPosition?: 'left' | 'right';
+	widgetSize?: 'small' | 'medium' | 'large';
+}
+
+export interface HeyoIdentifyMeta {
+	userId?: string;
+	email?: string;
+	name?: string;
 }
 ```
 

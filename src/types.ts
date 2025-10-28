@@ -51,17 +51,26 @@ export type HeyoAgentStatus = 'online' | 'away' | 'offline';
 
 export type HeyoAPI = {
 	/**
-	 * Show the HEYO widget.
+	 * Internal flag indicating whether the widget is ready.
+	 * @internal
 	 */
-	show(): void;
+	_ready: boolean;
+	/**
+	 * Show the HEYO widget.
+	 * @param options - Optional parameters
+	 * @param options.force - Force show even if hideWhenOffline is enabled and agents are offline
+	 */
+	show(options?: { force?: boolean }): void;
 	/**
 	 * Hide the HEYO widget.
 	 */
 	hide(): void;
 	/**
 	 * Open the HEYO widget
+	 * @param options - Optional parameters
+	 * @param options.force - Force open even if hideWhenOffline is enabled and agents are offline
 	 */
-	open(): void;
+	open(options?: { force?: boolean }): void;
 	/**
 	 * Close the HEYO widget.
 	 */
@@ -133,6 +142,21 @@ export type HeyoAPI = {
 	 * });
 	 */
 	onAgentStatusChange(callback: (status: HeyoAgentStatus) => void): void;
+	/**
+	 * Register a callback to be called when the HEYO widget is fully ready.
+	 * If the widget is already ready, the callback is called immediately.
+	 * Otherwise, it's queued and called once the widget finishes initializing.
+	 * 
+	 * @param callback - Function to call when the widget is ready
+	 * 
+	 * @example
+	 * HEYO.onReady(() => {
+	 *   console.log('HEYO widget is ready!');
+	 *   // Safe to call other HEYO methods here
+	 *   HEYO.identify({ userId: '123' });
+	 * });
+	 */
+	onReady(callback: () => void): void;
 	/**
 	 * Flag becomes true once the widget finished booting.
 	 */
