@@ -29,10 +29,16 @@ npm i @heyo.so/js
 
 ### 1 · Import once on the client
 
+You can use either named or default import:
+
 ```ts
+// Named import
 import { HEYO } from "@heyo.so/js";
 
-// Use HEYO.init() to load the widget. You can optionally pass options (see below)
+// OR default import
+import HEYO from "@heyo.so/js";
+
+// Both work identically! Use HEYO.init() to load the widget
 HEYO.init({
 	projectId: "YOUR_PROJECT_ID", // optional in production, required on localhost
 });
@@ -154,7 +160,7 @@ HEYO.onReady(() => {
 ```tsx
 "use client";
 import { useEffect } from "react";
-import { HEYO } from "@heyo.so/js";
+import HEYO from "@heyo.so/js"; // or: import { HEYO } from "@heyo.so/js"
 
 export default function Page() {
 	useEffect(() => {
@@ -170,7 +176,7 @@ export default function Page() {
 ```ts
 // plugins/heyo.client.ts
 import { defineNuxtPlugin } from "#app";
-import { HEYO } from "@heyo.so/js";
+import HEYO from "@heyo.so/js"; // or: import { HEYO } from "@heyo.so/js"
 
 export default defineNuxtPlugin(() => {
 	HEYO.init({ projectId: "YOUR_PROJECT_ID" });
