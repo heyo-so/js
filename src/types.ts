@@ -161,6 +161,57 @@ export type HeyoAPI = {
 	 * Flag becomes true once the widget finished booting.
 	 */
 	readonly ready: boolean;
+	/**
+	 * Add a tag to the current visitor.
+	 * Tags can be used to categorize visitors (e.g., 'vip', 'paid-user', 'trial').
+	 * 
+	 * @param tag - The tag to add
+	 * 
+	 * @example
+	 * HEYO.addTag('premium-user');
+	 * HEYO.addTag('onboarding-complete');
+	 */
+	addTag(tag: string): void;
+	/**
+	 * Remove a tag from the current visitor.
+	 * 
+	 * @param tag - The tag to remove
+	 * 
+	 * @example
+	 * HEYO.removeTag('trial-user');
+	 */
+	removeTag(tag: string): void;
+	/**
+	 * Set all tags for the current visitor, replacing any existing tags.
+	 * 
+	 * @param tags - Array of tags to set
+	 * 
+	 * @example
+	 * HEYO.setTags(['vip', 'paid-user', 'active']);
+	 */
+	setTags(tags: string[]): void;
+	/**
+	 * Set a custom field on the current visitor.
+	 * Custom fields can store any metadata about your visitors (e.g., plan type, signup date, etc.).
+	 * 
+	 * @param key - The field name (alphanumeric, dots, dashes, and underscores allowed)
+	 * @param value - The field value (string, number, or boolean)
+	 * 
+	 * @example
+	 * HEYO.setField('plan', 'premium');
+	 * HEYO.setField('signupDate', '2025-01-15');
+	 * HEYO.setField('isSubscribed', true);
+	 */
+	setField(key: string, value: string | number | boolean): void;
+	/**
+	 * Remove a custom field from the current visitor.
+	 * 
+	 * @param key - The field name to remove
+	 * 
+	 * @example
+	 * HEYO.removeField('tempData');
+	 */
+	removeField(key: string): void;
 };
 
 export type HeyoGlobal = HeyoAPI & {
