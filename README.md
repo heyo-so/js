@@ -90,6 +90,11 @@ HEYO.init({
 | `toggle()`                                | Toggle the chat panel open/closed                                         |
 | `isOpen()`                                | Returns `true` if the chat panel is currently open                        |
 | `identify(meta)`                          | Pass user metadata (ID, email, name…)                                     |
+| `addTag(tag)`                             | Add a tag to categorize the visitor                                       |
+| `removeTag(tag)`                          | Remove a tag from the visitor                                             |
+| `setTags(tags)`                           | Replace all visitor tags with a new set                                   |
+| `setField(key, value)`                    | Set a custom field (key-value metadata)                                   |
+| `removeField(key)`                        | Remove a custom field                                                     |
 | `configure(settings)`                     | Dynamically change widget appearance (style, position, size, color)       |
 | `getAgentStatus()`                        | Returns current agent status: `'online'`, `'away'`, or `'offline'`        |
 | `onAgentStatusChange(callback)`           | Register a callback for when agent status changes                         |
@@ -139,6 +144,28 @@ HEYO.onAgentStatusChange((status) => {
 // Or check status directly
 const status = HEYO.getAgentStatus();
 ```
+
+#### Tags and Custom Fields
+
+Add metadata to categorize and track visitors:
+
+```ts
+// Add tags for categorization
+HEYO.addTag('premium-user');
+HEYO.addTag('onboarding-complete');
+
+// Set custom fields for any key-value data
+HEYO.setField('plan', 'premium');
+HEYO.setField('signup-date', '2025-01-15');
+HEYO.setField('is-subscribed', true);
+HEYO.setField('monthly-revenue', 299);
+
+// Remove tags or fields
+HEYO.removeTag('trial-user');
+HEYO.removeField('temp-data');
+```
+
+Your support team sees this metadata in the dashboard with smart formatting (clickable URLs, formatted dates, etc.).
 
 #### Wait for Widget to be Ready
 
@@ -205,6 +232,11 @@ export interface HeyoAPI {
 	toggle(): void;
 	isOpen(): boolean;
 	identify(meta: HeyoIdentifyMeta): void;
+	addTag(tag: string): void;
+	removeTag(tag: string): void;
+	setTags(tags: string[]): void;
+	setField(key: string, value: string | number | boolean): void;
+	removeField(key: string): void;
 	configure(settings: HeyoWidgetSettings): void;
 	getAgentStatus(): HeyoAgentStatus;
 	onAgentStatusChange(callback: (status: HeyoAgentStatus) => void): void;
