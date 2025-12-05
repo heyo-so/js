@@ -158,9 +158,44 @@ export type HeyoAPI = {
 	 */
 	onReady(callback: () => void): void;
 	/**
+	 * Register a callback to be called when the chat widget is opened.
+	 * The callback is triggered every time the chat opens, whether by user click
+	 * or programmatically via `open()` or `toggle()`.
+	 * 
+	 * @param callback - Function to call when the chat opens
+	 * 
+	 * @example
+	 * HEYO.onOpen(() => {
+	 *   analytics.track('chat_opened');
+	 * });
+	 */
+	onOpen(callback: () => void): void;
+	/**
+	 * Register a callback to be called when the chat widget is closed.
+	 * The callback is triggered every time the chat closes, whether by user click
+	 * or programmatically via `close()` or `toggle()`.
+	 * 
+	 * @param callback - Function to call when the chat closes
+	 * 
+	 * @example
+	 * HEYO.onClose(() => {
+	 *   analytics.track('chat_closed');
+	 * });
+	 */
+	onClose(callback: () => void): void;
+	/**
 	 * Flag becomes true once the widget finished booting.
 	 */
 	readonly ready: boolean;
+	/**
+	 * Log out the current visitor and clear their session.
+	 * Useful when your user logs out of your app.
+	 * 
+	 * @example
+	 * // When user logs out of your app
+	 * HEYO.logout();
+	 */
+	logout(): void;
 	/**
 	 * Add a tag to the current visitor.
 	 * Tags can be used to categorize visitors (e.g., 'vip', 'paid-user', 'trial').
