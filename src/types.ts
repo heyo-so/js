@@ -8,10 +8,9 @@ export type HeyoConfig = HeyoWidgetSettings & {
 	 */
 	hidden?: boolean;
 	/**
-	 * Control when the full chat iframe loads.
+	 * Control when HEYO starts loading.
 	 * - 'eager' loads it during widget initialization (default)
-	 * - 'lazy' waits until the host page has loaded and the browser is idle, unless the chat is opened first
-	 * - 'on-open' waits until the visitor opens the chat or an iframe-dependent API is used
+	 * - 'lazy' waits until the host page has loaded and the browser is idle, unless a HEYO API call needs it first
 	 */
 	loadMode?: HeyoLoadMode;
 	/**
@@ -35,7 +34,7 @@ export type HeyoLogLevel = 'debug' | 'minimal' | 'none';
 /**
  * When the full chat iframe should load.
  */
-export type HeyoLoadMode = 'eager' | 'lazy' | 'on-open';
+export type HeyoLoadMode = 'eager' | 'lazy';
 
 export type HeyoWidgetSettings = {
 	/**

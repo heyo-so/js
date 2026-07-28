@@ -65,7 +65,7 @@ HEYO.identify({
 | --------- | -------------------------------- | ----------- | -------------------------------------------------------------------------------- |
 | projectId | `string?`                        | –           | Your HEYO project ID. Required for localhost development                         |
 | hidden    | `boolean?`                       | `false`     | Start with the widget fully hidden                                               |
-| loadMode  | `'eager' \| 'lazy' \| 'on-open'` | `'eager'`   | Choose eager boot, idle-after-load preload, or strict loading when opened        |
+| loadMode  | `'eager' \| 'lazy'`               | `'eager'`   | Load immediately or wait until the host page has loaded and the browser is idle  |
 | widgetStyle | `'bubble' \| 'agent-card'`     | project setting | Override the launcher style for this page                                    |
 | widgetPosition | `'left' \| 'right'`         | project setting | Override the launcher position for this page                                 |
 | widgetSize | `'small' \| 'medium' \| 'large'` | project setting | Override the launcher size for this page                                  |
@@ -78,7 +78,7 @@ Example:
 HEYO.init({
 	projectId: "abc123",
 	hidden: true,
-	loadMode: "on-open",
+	loadMode: "lazy",
 	widgetStyle: "bubble",
 	logs: "debug",
 });

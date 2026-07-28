@@ -4,6 +4,7 @@ export * from './types';
 import type { HeyoConfig, HeyoAPI } from './types';
 
 let loaderPromise: Promise<HeyoAPI> | null = null;
+let startDeferredLoader: (() => void) | null = null;
 
 function injectScript(src: string): Promise<HeyoAPI> {
     return new Promise((resolve, reject) => {
@@ -25,6 +26,40 @@ function injectScript(src: string): Promise<HeyoAPI> {
             }, 100);
         };
         document.head.appendChild(script);
+    });
+}
+
+/**
+ * Keep every HEYO network request out of the host page's critical load path.
+ * Calls that need the remote API can still start the loader immediately.
+ */
+function injectScriptAfterPageLoad(src: string): Promise<HeyoAPI> {
+    return new Promise((resolve, reject) => {
+        let started = false;
+
+        const start = () => {
+            if (started) return;
+            started = true;
+            startDeferredLoader = null;
+            injectScript(src).then(resolve, reject);
+        };
+
+        const scheduleWhenIdle = () => {
+            if (started) return;
+            if (typeof window.requestIdleCallback === 'function') {
+                window.requestIdleCallback(start, { timeout: 2000 });
+            } else {
+                setTimeout(start, 0);
+            }
+        };
+
+        startDeferredLoader = start;
+
+        if (document.readyState === 'complete') {
+            scheduleWhenIdle();
+        } else {
+            window.addEventListener('load', scheduleWhenIdle, { once: true });
+        }
     });
 }
 
@@ -59,7 +94,7 @@ export async function loadHeyo(opts: HeyoConfig = {}): Promise<HeyoAPI> {
     if (opts.widgetColor) url.searchParams.set('widgetColor', opts.widgetColor);
     if (opts.logs) url.searchParams.set('logs', opts.logs);
 
-    loaderPromise = injectScript(url.toString());
+    loaderPromise = opts.loadMode === 'lazy' ? injectScriptAfterPageLoad(url.toString()) : injectScript(url.toString());
     return loaderPromise;
 }
 
@@ -72,6 +107,9 @@ export const init = loadHeyo;
 import type { HeyoGlobal } from './types';
 
 async function waitForMethod(methodName: string): Promise<HeyoAPI> {
+    // A user action or iframe-dependent API call takes priority over lazy boot.
+    startDeferredLoader?.();
+
     // First ensure the basic HEYO object exists
     await loadHeyo();
 
