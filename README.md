@@ -61,11 +61,12 @@ HEYO.identify({
 
 ## Configuration (`HeyoConfig`)
 
-| Option    | Type                             | Default     | Description                                              |
-| --------- | -------------------------------- | ----------- | -------------------------------------------------------- |
-| projectId | `string?`                        | –           | Your HEYO project ID. Required for localhost development |
-| hidden    | `boolean?`                       | `false`     | Start with the widget fully hidden                       |
-| logs      | `'debug' \| 'minimal' \| 'none'` | `'minimal'` | Control console log verbosity                            |
+| Option    | Type                             | Default     | Description                                                                      |
+| --------- | -------------------------------- | ----------- | -------------------------------------------------------------------------------- |
+| projectId | `string?`                        | –           | Your HEYO project ID. Required for localhost development                         |
+| hidden    | `boolean?`                       | `false`     | Start with the widget fully hidden                                               |
+| loadMode  | `'eager' \| 'lazy'`              | `'eager'`   | In lazy mode, preload after page load + idle, or immediately when opened first   |
+| logs      | `'debug' \| 'minimal' \| 'none'` | `'minimal'` | Control console log verbosity                                                    |
 
 Example:
 
@@ -73,6 +74,7 @@ Example:
 HEYO.init({
 	projectId: "abc123",
 	hidden: true,
+	loadMode: "lazy",
 	logs: "debug",
 });
 ```

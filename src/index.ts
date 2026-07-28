@@ -52,6 +52,7 @@ export async function loadHeyo(opts: HeyoConfig = {}): Promise<HeyoAPI> {
     const url = new URL(opts.scriptSrc ?? 'https://heyo.so/embed/script');
     if (opts.projectId) url.searchParams.set('projectId', opts.projectId);
     if (opts.hidden) url.searchParams.set('hidden', 'true');
+    if (opts.loadMode) url.searchParams.set('loadMode', opts.loadMode);
     if (opts.logs) url.searchParams.set('logs', opts.logs);
 
     loaderPromise = injectScript(url.toString());
@@ -138,7 +139,14 @@ export const HEYO: HeyoGlobal = new Proxy({} as HeyoGlobal, {
                 if (window.HEYO && typeof window.HEYO.getAgentStatus === 'function') {
                     return window.HEYO.getAgentStatus();
                 }
-                // Default to 'offline' if not ready
+                // Preserve the synchronous fallback while replaying the read once
+                // the loader is ready. The embed stub uses that read to opt out of
+                // lazy loading when closed-state agent status is required.
+                waitForMethod('getAgentStatus')
+                    .then((api) => api.getAgentStatus())
+                    .catch((error) => {
+                        console.error(error.message);
+                    });
                 return 'offline';
             };
         }
