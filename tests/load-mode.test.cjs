@@ -23,12 +23,21 @@ test('an immediate status read reaches the embed API after init while returning 
     const { HEYO } = require('../dist/index.js');
     const initialization = HEYO.init({
         projectId: '0123456789abcdef01234567',
-        loadMode: 'lazy',
+        loadMode: 'on-open',
+        widgetStyle: 'bubble',
+        widgetPosition: 'left',
+        widgetSize: 'small',
+        widgetColor: '#123456',
         scriptSrc: 'https://heyo.test/embed/script',
     });
 
     assert.equal(HEYO.getAgentStatus(), 'offline');
-    assert.equal(new URL(injectedScript.src).searchParams.get('loadMode'), 'lazy');
+    const scriptUrl = new URL(injectedScript.src);
+    assert.equal(scriptUrl.searchParams.get('loadMode'), 'on-open');
+    assert.equal(scriptUrl.searchParams.get('widgetStyle'), 'bubble');
+    assert.equal(scriptUrl.searchParams.get('widgetPosition'), 'left');
+    assert.equal(scriptUrl.searchParams.get('widgetSize'), 'small');
+    assert.equal(scriptUrl.searchParams.get('widgetColor'), '#123456');
 
     window.HEYO = {
         getAgentStatus() {

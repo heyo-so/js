@@ -53,6 +53,10 @@ export async function loadHeyo(opts: HeyoConfig = {}): Promise<HeyoAPI> {
     if (opts.projectId) url.searchParams.set('projectId', opts.projectId);
     if (opts.hidden) url.searchParams.set('hidden', 'true');
     if (opts.loadMode) url.searchParams.set('loadMode', opts.loadMode);
+    if (opts.widgetStyle) url.searchParams.set('widgetStyle', opts.widgetStyle);
+    if (opts.widgetPosition) url.searchParams.set('widgetPosition', opts.widgetPosition);
+    if (opts.widgetSize) url.searchParams.set('widgetSize', opts.widgetSize);
+    if (opts.widgetColor) url.searchParams.set('widgetColor', opts.widgetColor);
     if (opts.logs) url.searchParams.set('logs', opts.logs);
 
     loaderPromise = injectScript(url.toString());

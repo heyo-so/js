@@ -65,7 +65,11 @@ HEYO.identify({
 | --------- | -------------------------------- | ----------- | -------------------------------------------------------------------------------- |
 | projectId | `string?`                        | –           | Your HEYO project ID. Required for localhost development                         |
 | hidden    | `boolean?`                       | `false`     | Start with the widget fully hidden                                               |
-| loadMode  | `'eager' \| 'lazy'`              | `'eager'`   | In lazy mode, preload after page load + idle, or immediately when opened first   |
+| loadMode  | `'eager' \| 'lazy' \| 'on-open'` | `'eager'`   | Choose eager boot, idle-after-load preload, or strict loading when opened        |
+| widgetStyle | `'bubble' \| 'agent-card'`     | project setting | Override the launcher style for this page                                    |
+| widgetPosition | `'left' \| 'right'`         | project setting | Override the launcher position for this page                                 |
+| widgetSize | `'small' \| 'medium' \| 'large'` | project setting | Override the launcher size for this page                                  |
+| widgetColor | `string`                        | project setting | Override the launcher color for this page                                   |
 | logs      | `'debug' \| 'minimal' \| 'none'` | `'minimal'` | Control console log verbosity                                                    |
 
 Example:
@@ -74,7 +78,8 @@ Example:
 HEYO.init({
 	projectId: "abc123",
 	hidden: true,
-	loadMode: "lazy",
+	loadMode: "on-open",
+	widgetStyle: "bubble",
 	logs: "debug",
 });
 ```
